@@ -19,36 +19,16 @@ properties(
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
-        string(
-          defaultValue: '',
-          description: 'Repo for tests to run. If left blank, the current repo is assumed (*note* this default will only work for multibranch pipelines).',
-          name: 'TEST_REPO'
-        ),
-        string(
-          defaultValue: '',
-          description: 'Git reference to the branch or tag of the tests repo.',
-          name: 'TEST_REF'
-        ),
-        string(
-          defaultValue: 'tests',
-          description: 'Directory containing tests to run. Should at least one of the follow: an ansible-playbooks directory containing one or more test directories each of which having a playbook.yml, a scripts directory containing one or more test directories each of which having a run-test.sh',
-          name: 'TEST_DIR'
-        ),
-        string(
-          defaultValue: '',
-          description: 'Contains the CI_MESSAGE for a message bus triggered build.',
-          name: 'CI_MESSAGE'
-        )
 	string(
 	  defaultValue: '',
 	  description: 'Hostname of the preprovisoined host.',
 	  name: 'PREPROVISIONED_HOST'
-	)
+	),
 	string(
 	  defaultValue:'osp-jenkins-private-key',
 	  description: 'SSH private key Jenkins credential ID for Beaker/SSH operations',
 	  name: 'SSHPRIVKEYCREDENTIALID'
-	)
+	),
       ]
     )
   ]
@@ -60,7 +40,6 @@ library(
   retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"])
 )
 
-List arches = params.ARCHES.tokenize(',')
 def errorMessages = ''
 def config = MAQEAPI.v1.getProvisioningConfig(this)
 config.jobgroup = 'multiarch-qe'
@@ -70,6 +49,12 @@ targetHost.hostname = params.PREPROVISIONED_HOST
 targetHost.name = params.PREPROVISIONED_HOST
 targetHost.arch = 'x86_64'
 targetHost.provisioner = 'NOOP'
+
+withCredentials([usernamePassword(credentialsId:'osp-jenkins-private-key', 
+				  usernameVariable:'USERNAME', 
+				  passwordVariable:'TOKEN',)]){
+	targetHost.scriptParams = "$USERNAME $PASSWORD"
+}
 
 MAQEAPI.v1.runTest(
   this,
