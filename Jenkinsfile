@@ -2,13 +2,6 @@ properties(
   [
     parameters(
       [
-        [$class: 'ValidatingStringParameterDefinition',
-         defaultValue: 'ppc64le,aarch64',
-         description: 'A comma separated list of architectures to run the test on. Valid values include [x86_64, ppc64le, aarch64, s390x].',
-         failedValidationMessage: 'Invalid architecture. Valid values are [x86_64, ppc64le, aarch64, s390x].',
-         name: 'ARCHES',
-         regex: '^(?:x86_64|ppc64le|aarch64|s390x)(?:,\\s*(?:x86_64|ppc64le|aarch64|s390x))*$'
-        ],
         string(
           defaultValue: 'https://github.com/redhat-multiarch-qe/multiarch-ci-libraries',
           description: 'Repo for shared libraries.',
@@ -50,15 +43,16 @@ targetHost.name = params.PREPROVISIONED_HOST
 targetHost.arch = 'x86_64'
 targetHost.provisioner = 'NOOP'
 
-withCredentials([usernamePassword(credentialsId:'osp-jenkins-private-key', 
+withCredentials([usernamePassword(credentialsId:'osp16-gitlab-consulting-rh', 
 				  usernameVariable:'USERNAME', 
-				  passwordVariable:'TOKEN',)]){
-	targetHost.scriptParams = "$USERNAME $PASSWORD"
+				  passwordVariable:'TOKEN',)
+]){
+	targetHost.scriptParams = "$USERNAME $TOKEN"
 }
 
 MAQEAPI.v1.runTest(
   this,
-  targetHosts,
+  targetHost,
   config,
   { host ->
     /*********************************************************/
