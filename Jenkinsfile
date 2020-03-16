@@ -13,7 +13,7 @@ properties(
           name: 'LIBRARIES_REF'
         ),
 	string(
-	  defaultValue: '',
+	  defaultValue: 'hp-moonshot-01-c29.ml3.eng.bos.redhat.com',
 	  description: 'Hostname of the preprovisoined host.',
 	  name: 'PREPROVISIONED_HOST'
 	),
