@@ -37,7 +37,7 @@ def errorMessages = ''
 def config = MAQEAPI.v1.getProvisioningConfig(this)
 config.jobgroup = 'multiarch-qe'
 
-def targetHost = MAQEAPI.vi.newTargetHost()
+def targetHost = MAQEAPI.v1.newTargetHost()
 targetHost.hostname = params.PREPROVISIONED_HOST
 targetHost.name = params.PREPROVISIONED_HOST
 targetHost.arch = 'x86_64'
