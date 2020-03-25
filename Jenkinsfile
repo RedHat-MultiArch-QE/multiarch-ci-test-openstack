@@ -3,12 +3,12 @@ properties(
     parameters(
       [
         string(
-          defaultValue: 'https://github.com/redhat-multiarch-qe/multiarch-ci-libraries',
+          defaultValue: 'https://github.com/ReninJose/multiarch-ci-libraries',
           description: 'Repo for shared libraries.',
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'v1.3.0',
+          defaultValue: 'New-release',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
